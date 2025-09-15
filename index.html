@@ -5,19 +5,65 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>E‑Smart Market Pro — Landing Page</title>
 <style>
-  body{margin:0;font-family:system-ui,Segoe UI,Tahoma,Arial,sans-serif;background:#f6f8fc;color:#0b1220}
+  body{margin:0;font-family:'Tajawal',system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f8fc;color:#0b1220}
   header{background:#0fb5a7;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center}
   .lang-switch button{background:transparent;border:none;color:#fff;font-weight:bold;cursor:pointer;margin:0 4px}
   .hero{padding:40px 20px;text-align:center}
   .hero h1{font-size:2rem;margin-bottom:10px}
   .hero p{font-size:1.1rem;color:#586179}
-  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;padding:20px}
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;padding:20px;max-width:1100px;margin:auto}
   .feature{background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.1);text-align:center}
-  .cta{background:#0fb5a7;color:#fff;padding:20px;text-align:center}
-  .cta form{max-width:400px;margin:0 auto;display:grid;gap:10px}
+  /* جدول التسعير */
+  .pricing-wrap{max-width:1100px;margin:auto}
+  .pricing-table { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding:20px }
+  .plan { background: #fff; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); width: 300px; overflow: hidden; display: flex; flex-direction: column; }
+  .plan-header { background: #0fb5a7; color: #fff; padding: 15px; text-align: center; font-size: 1.1rem; font-weight: 700; }
+  .price { background: #f97316; color: #fff; padding: 10px; text-align: center; font-size: 1.2rem; font-weight: 700; }
+  .features-list { padding: 15px; flex: 1; }
+  .features-list li { margin-bottom: 8px; list-style: none; }
+  .features-list li::before { content: "✔ "; color: #0fb5a7; }
+  .cta { text-align: center; padding: 15px; }
+  .cta button { background: #0fb5a7; color: #fff; border: none; padding: 10px 20px; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+  .cta button:hover { background: #099e92; }
+  /* سلايدر الشهادات (Fade) */
+  .testimonials-wrap{background:#fff;padding:20px;margin:20px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);max-width:700px;margin:auto}
+  .testimonial-stage{position:relative;height:260px}
+  .testimonial-card {
+    position: absolute; inset:0;
+    width: 100%; height: 100%;
+    opacity: 0; transition: opacity 0.8s ease;
+    text-align: center; padding: 20px; box-sizing: border-box;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .testimonial-card.active { opacity: 1; z-index: 1; }
+  .nav-btn{
+    position:absolute;top:50%;transform:translateY(-50%);
+    background:#0fb5a7;color:#fff;border:none;border-radius:50%;
+    width:35px;height:35px;cursor:pointer
+  }
+  #prev-btn{left:10px} #next-btn{right:10px}
+  #dots-container{text-align:center;margin-top:12px}
+  #dots-container span{
+    height:12px;width:12px;margin:0 5px;display:inline-block;border-radius:50%;background:#ccc;cursor:pointer
+  }
+  /* نموذج التواصل */
+  .cta-form{background:#0fb5a7;color:#fff;padding:20px;text-align:center}
+  .cta-form form{max-width:420px;margin:0 auto;display:grid;gap:10px}
   input,button{padding:10px;border-radius:6px;border:1px solid #ccc;font-size:1rem}
-  button{background:#f97316;color:#fff;border:none;cursor:pointer}
+  .cta-form button{background:#f97316;color:#fff;border:none;cursor:pointer}
   footer{background:#e3e8f0;padding:10px;text-align:center;font-size:.9rem;color:#586179}
+  /* قسم اتصل بنا */
+  .contact-wrap{background:#fff;padding:20px;margin:20px;border-radius:8px;box-shadow:0 1px 4px rgba(0,0,0,.1);max-width:1100px;margin:auto}
+  .contact-flex{display:flex;flex-wrap:wrap;gap:20px;justify-content:center;margin-top:20px}
+  .contact-flex > div{flex:1;min-width:260px}
+  /* زر واتساب */
+  #whatsapp-button {
+    position: fixed; bottom: 20px; right: 20px; background: #25D366; color: #fff;
+    font-size: 28px; text-align: center; width: 55px; height: 55px; line-height: 55px;
+    border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 999; text-decoration: none;
+    transition: background 0.3s ease;
+  }
+  #whatsapp-button:hover { background: #1ebe5d; }
 </style>
 </head>
 <body>
@@ -38,9 +84,43 @@
 
 <section class="features" id="features"></section>
 
-<section class="cta">
+<section class="pricing-wrap">
+  <h2 style="text-align:center;color:#0fb5a7" id="pricing-title"></h2>
+  <div class="pricing-table">
+    <div class="plan">
+      <div class="plan-header" id="local-title"></div>
+      <div class="price" id="local-price"></div>
+      <ul class="features-list" id="local-features"></ul>
+      <div class="cta"><button id="local-cta"></button></div>
+    </div>
+    <div class="plan">
+      <div class="plan-header" id="regional-title"></div>
+      <div class="price" id="regional-price"></div>
+      <ul class="features-list" id="regional-features"></ul>
+      <div class="cta"><button id="regional-cta"></button></div>
+    </div>
+    <div class="plan">
+      <div class="plan-header" id="global-title"></div>
+      <div class="price" id="global-price"></div>
+      <ul class="features-list" id="global-features"></ul>
+      <div class="cta"><button id="global-cta"></button></div>
+    </div>
+  </div>
+</section>
+
+<section class="testimonials-wrap">
+  <h2 style="text-align:center;color:#0fb5a7" id="testimonials-title"></h2>
+  <div class="testimonial-stage">
+    <div id="testimonials-slider"></div>
+    <button id="prev-btn" class="nav-btn">‹</button>
+    <button id="next-btn" class="nav-btn">›</button>
+  </div>
+  <div id="dots-container"></div>
+</section>
+
+<section class="cta-form">
   <h2 id="cta-title"></h2>
-  <form>
+  <form id="lead-form">
     <input type="text" placeholder="" id="name" required>
     <input type="tel" placeholder="" id="phone" required>
     <input type="email" placeholder="" id="email" required>
@@ -49,11 +129,30 @@
   </form>
 </section>
 
+<section class="contact-wrap">
+  <h2 style="text-align:center;color:#0fb5a7" id="contact-title"></h2>
+  <div class="contact-flex">
+    <div>
+      <p id="contact-desc"></p>
+      <p><strong>📍</strong> <span id="contact-address"></span></p>
+      <p><strong>📞</strong> <a href="#" id="contact-phone"></a></p>
+      <p><strong>✉️</strong> <a href="#" id="contact-email"></a></p>
+    </div>
+    <div>
+      <iframe id="contact-map" src="" width="100%" height="260" style="border:0;border-radius:8px;" allowfullscreen="" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
 <footer>
   <span id="footer-text"></span>
 </footer>
 
+<!-- زر واتساب عائم -->
+<a href="#" target="_blank" id="whatsapp-button" title="WhatsApp">💬</a>
+
 <script>
+/* المحتوى متعدد اللغات */
 const content = {
   ar:{
     heroTitle:"حوّل مقهاك إلى تجربة ذكية",
@@ -65,9 +164,29 @@ const content = {
       "🌐 تعدد لغات (AR/FR/EN)",
       "📤 تنبيهات واتساب وتقارير يومية"
     ],
+    pricingTitle:"خطط وأسعار E‑Smart Market Pro",
+    pricing:{
+      local:{title:"المحلي",price:"9,900 – 14,900 MAD",features:["POS كامل مع مخزون بالجرعات","لوحة مالك لحظية (WebSocket + Push)","صفحة هبوط مخصصة","عقد بايلوت + قائمة فحص","تدريب ميداني"],cta:"احجز الآن"},
+      regional:{title:"الإقليمي",price:"1,500 – 2,500 USD",features:["كل مزايا الخطة المحلية","دعم تعدد العملات والضرائب","تدريب عن بعد","دعم فني 6 أشهر"],cta:"تواصل معنا"},
+      global:{title:"العالمية",price:"3,500 – 5,000 USD أو 49 – 79 USD/شهر",features:["كل مزايا الخطة الإقليمية","تكامل مع بوابات دفع دولية","واجهة إنجليزية كاملة","دعم فني 12 شهر"],cta:"ابدأ التجربة"}
+    },
+    testimonialsTitle:"آراء عملائنا",
+    testimonials:[
+      {name:"أحمد - كافيه روز",text:"النظام غيّر طريقة عملنا بالكامل، أصبحنا نعرف المبيعات والمخزون لحظيًا.",img:"images/testimonials/ahmed.jpg"},
+      {name:"سارة - مطعم المذاق",text:"التركيب كان سريع والدعم ممتاز. أنصح به لكل صاحب مطعم.",img:"images/testimonials/sarah.jpg"},
+      {name:"يوسف - كافيه تايم",text:"ميزة التنبيهات على الواتساب أنقذتني من نفاد المخزون في أوقات الذروة.",img:"images/testimonials/youssef.jpg"}
+    ],
     ctaTitle:"احجز عرضًا تجريبيًا الآن",
     placeholders:["الاسم","رقم الهاتف","البريد الإلكتروني","نوع النشاط"],
     ctaButton:"إرسال",
+    contactTitle:"اتصل بنا",
+    contactDesc:"يسعدنا تواصلك معنا لأي استفسار أو طلب عرض.",
+    contactAddress:"أكادير، المغرب",
+    contactPhone:"+212 6 00 00 00 00",
+    contactEmail:"info@esmartmarketpro.com",
+    contactMap:"https://www.google.com/maps?q=Agadir%20Morocco&output=embed",
+    whatsappTitle:"تواصل عبر واتساب",
+    whatsappNumber:"+212600000000",
     footer:"© 2025 جميع الحقوق محفوظة — E‑Smart Market Pro"
   },
   fr:{
@@ -80,9 +199,29 @@ const content = {
       "🌐 Multilingue (AR/FR/EN)",
       "📤 Alertes WhatsApp et rapports quotidiens"
     ],
+    pricingTitle:"Plans et Tarifs E‑Smart Market Pro",
+    pricing:{
+      local:{title:"Local",price:"9,900 – 14,900 MAD",features:["POS complet avec stock par recettes","Tableau de bord propriétaire en temps réel","Page d'accueil personnalisée","Contrat pilote + checklist","Formation sur site"],cta:"Réservez maintenant"},
+      regional:{title:"Régional",price:"1,500 – 2,500 USD",features:["Toutes les fonctionnalités locales","Support multi-devises et taxes","Formation à distance","Support technique 6 mois"],cta:"Contactez-nous"},
+      global:{title:"Global",price:"3,500 – 5,000 USD ou 49 – 79 USD/mois",features:["Toutes les fonctionnalités régionales","Intégration passerelles de paiement internationales","Interface complète en anglais","Support technique 12 mois"],cta:"Commencer l'essai"}
+    },
+    testimonialsTitle:"Avis de nos clients",
+    testimonials:[
+      {name:"Ahmed - Café Rose",text:"Le système a complètement changé notre façon de travailler, nous voyons les ventes et le stock en temps réel.",img:"images/testimonials/ahmed.jpg"},
+      {name:"Sarah - Restaurant Saveur",text:"Installation rapide et support excellent. Je le recommande à tous les restaurateurs.",img:"images/testimonials/sarah.jpg"},
+      {name:"Youssef - Café Time",text:"Les alertes WhatsApp m'ont sauvé d'une rupture de stock aux heures de pointe.",img:"images/testimonials/youssef.jpg"}
+    ],
     ctaTitle:"Réservez une démo maintenant",
     placeholders:["Nom","Téléphone","Email","Type d'activité"],
     ctaButton:"Envoyer",
+    contactTitle:"Contactez-nous",
+    contactDesc:"Nous serons ravis de répondre à vos questions ou demandes de démonstration.",
+    contactAddress:"Agadir, Maroc",
+    contactPhone:"+212 6 00 00 00 00",
+    contactEmail:"info@esmartmarketpro.com",
+    contactMap:"https://www.google.com/maps?q=Agadir%20Morocco&output=embed",
+    whatsappTitle:"Contactez-nous sur WhatsApp",
+    whatsappNumber:"+212600000000",
     footer:"© 2025 Tous droits réservés — E‑Smart Market Pro"
   },
   en:{
@@ -95,17 +234,40 @@ const content = {
       "🌐 Multilingual (AR/FR/EN)",
       "📤 WhatsApp alerts & daily reports"
     ],
+    pricingTitle:"E‑Smart Market Pro Plans & Pricing",
+    pricing:{
+      local:{title:"Local",price:"9,900 – 14,900 MAD",features:["Full POS with recipe-based inventory","Real-time owner dashboard (WebSocket + Push)","Custom landing page","Pilot contract + checklist","On-site training"],cta:"Book Now"},
+      regional:{title:"Regional",price:"1,500 – 2,500 USD",features:["All local features","Multi-currency & tax support","Remote training","6-month tech support"],cta:"Contact Us"},
+      global:{title:"Global",price:"3,500 – 5,000 USD or 49 – 79 USD/month",features:["All regional features","International payment gateway integration","Full English interface","12-month tech support"],cta:"Start Trial"}
+    },
+    testimonialsTitle:"What Our Clients Say",
+    testimonials:[
+      {name:"Ahmed - Café Rose",text:"The system completely changed how we work, we see sales and stock in real time.",img:"images/testimonials/ahmed.jpg"},
+      {name:"Sarah - Flavor Restaurant",text:"Fast installation and excellent support. I recommend it to every restaurant owner.",img:"images/testimonials/sarah.jpg"},
+      {name:"Youssef - Café Time",text:"WhatsApp alerts saved me from running out of stock during peak hours.",img:"images/testimonials/youssef.jpg"}
+    ],
     ctaTitle:"Book a Demo Now",
     placeholders:["Name","Phone","Email","Business Type"],
     ctaButton:"Send",
+    contactTitle:"Contact Us",
+    contactDesc:"We’d be happy to hear from you for any inquiries or demo requests.",
+    contactAddress:"Agadir, Morocco",
+    contactPhone:"+212 6 00 00 00 00",
+    contactEmail:"info@esmartmarketpro.com",
+    contactMap:"https://www.google.com/maps?q=Agadir%20Morocco&output=embed",
+    whatsappTitle:"Chat with us on WhatsApp",
+    whatsappNumber:"+212600000000",
     footer:"© 2025 All rights reserved — E‑Smart Market Pro"
   }
 };
 
+/* تبديل اللغة وتعبئة الصفحة */
 function setLang(lang){
   const t = content[lang];
+  // Hero
   document.getElementById("hero-title").textContent = t.heroTitle;
   document.getElementById("hero-desc").textContent = t.heroDesc;
+  // Features
   const feats = document.getElementById("features");
   feats.innerHTML = "";
   t.features.forEach(f=>{
@@ -114,18 +276,119 @@ function setLang(lang){
     div.textContent=f;
     feats.appendChild(div);
   });
+  // Pricing
+  document.getElementById("pricing-title").textContent = t.pricingTitle;
+  ["local","regional","global"].forEach(type=>{
+    document.getElementById(`${type}-title`).textContent = t.pricing[type].title;
+    document.getElementById(`${type}-price`).textContent = t.pricing[type].price;
+    const list = document.getElementById(`${type}-features`);
+    list.innerHTML = "";
+    t.pricing[type].features.forEach(f=>{
+      const li = document.createElement("li");
+      li.textContent = f;
+      list.appendChild(li);
+    });
+    document.getElementById(`${type}-cta`).textContent = t.pricing[type].cta;
+  });
+  // Testimonials
+  renderTestimonials(lang);
+  // Contact form
   document.getElementById("cta-title").textContent = t.ctaTitle;
   document.getElementById("name").placeholder = t.placeholders[0];
   document.getElementById("phone").placeholder = t.placeholders[1];
   document.getElementById("email").placeholder = t.placeholders[2];
   document.getElementById("business").placeholder = t.placeholders[3];
   document.getElementById("cta-button").textContent = t.ctaButton;
+  // Contact section
+  document.getElementById("contact-title").textContent = t.contactTitle;
+  document.getElementById("contact-desc").textContent = t.contactDesc;
+  document.getElementById("contact-address").textContent = t.contactAddress;
+  const telLink = document.getElementById("contact-phone");
+  telLink.textContent = t.contactPhone;
+  telLink.href = "tel:" + t.contactPhone.replace(/\s+/g,'').replace(/^\+/, '');
+  const mailLink = document.getElementById("contact-email");
+  mailLink.textContent = t.contactEmail;
+  mailLink.href = "mailto:" + t.contactEmail;
+  document.getElementById("contact-map").src = t.contactMap;
+  // WhatsApp button
+  const wa = document.getElementById("whatsapp-button");
+  wa.title = t.whatsappTitle;
+  const waDigits = t.whatsappNumber.replace(/\D+/g,''); // keep digits
+  wa.href = "https://wa.me/" + waDigits;
+  // Footer
   document.getElementById("footer-text").textContent = t.footer;
+  // Dir/Lang
   document.documentElement.lang = lang;
   document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
 }
+
+/* سلايدر الشهادات بتأثير Fade + نقاط */
+let currentSlide = 0;
+let autoTimer = null;
+
+function renderTestimonials(lang){
+  const t = content[lang];
+  document.getElementById("testimonials-title").textContent = t.testimonialsTitle;
+
+  const slider = document.getElementById("testimonials-slider");
+  const dotsContainer = document.getElementById("dots-container");
+  slider.innerHTML = "";
+  dotsContainer.innerHTML = "";
+
+  t.testimonials.forEach((item, index)=>{
+    const card = document.createElement("div");
+    card.className = "testimonial-card" + (index===0 ? " active" : "");
+    card.innerHTML = `
+      <img src="${item.img}" alt="${item.name}" style="width:70px;height:70px;border-radius:50%;object-fit:cover;margin-bottom:10px;">
+      <p style="font-style:italic;margin:0 0 10px">"${item.text}"</p>
+      <p style="font-weight:bold;margin:0">${item.name}</p>
+    `;
+    slider.appendChild(card);
+
+    const dot = document.createElement("span");
+    if(index===0) dot.style.background = "#0fb5a7";
+    dot.addEventListener("click", ()=>{ goToSlide(index); });
+    dotsContainer.appendChild(dot);
+  });
+
+  currentSlide = 0;
+  restartAutoPlay();
+}
+
+function updateSlider(){
+  const cards = document.querySelectorAll(".testimonial-card");
+  const dots = document.querySelectorAll("#dots-container span");
+  cards.forEach((card, idx)=>{ card.classList.toggle("active", idx === currentSlide); });
+  dots.forEach((dot, idx)=>{ dot.style.background = idx === currentSlide ? "#0fb5a7" : "#ccc"; });
+}
+
+function goToSlide(n){
+  const total = document.querySelectorAll(".testimonial-card").length;
+  currentSlide = (n + total) % total;
+  updateSlider();
+  restartAutoPlay();
+}
+
+function nextSlide(){ goToSlide(currentSlide + 1); }
+function prevSlide(){ goToSlide(currentSlide - 1); }
+
+function restartAutoPlay(){
+  if(autoTimer) clearInterval(autoTimer);
+  autoTimer = setInterval(nextSlide, 5000);
+}
+
+// أزرار التنقل
+document.getElementById("prev-btn").addEventListener("click", prevSlide);
+document.getElementById("next-btn").addEventListener("click", nextSlide);
+
+// منع الإرسال الافتراضي للنموذج (يمكنك ربطه بـ Brevo/WhatsApp لاحقًا)
+document.getElementById("lead-form").addEventListener("submit", (e)=>{
+  e.preventDefault();
+  alert("تم استلام طلبك. سنعاود الاتصال بك قريبًا.");
+});
+
+// تشغيل مبدئي
 setLang("ar");
 </script>
-
 </body>
 </html>
