@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>E‑Smart Market Pro — Landing Page</title>
+<style>
+  body{margin:0;font-family:system-ui,Segoe UI,Tahoma,Arial,sans-serif;background:#f6f8fc;color:#0b1220}
+  header{background:#0fb5a7;color:#fff;padding:12px;display:flex;justify-content:space-between;align-items:center}
+  .lang-switch button{background:transparent;border:none;color:#fff;font-weight:bold;cursor:pointer;margin:0 4px}
+  .hero{padding:40px 20px;text-align:center}
+  .hero h1{font-size:2rem;margin-bottom:10px}
+  .hero p{font-size:1.1rem;color:#586179}
+  .features{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;padding:20px}
+  .feature{background:#fff;border-radius:8px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.1);text-align:center}
+  .cta{background:#0fb5a7;color:#fff;padding:20px;text-align:center}
+  .cta form{max-width:400px;margin:0 auto;display:grid;gap:10px}
+  input,button{padding:10px;border-radius:6px;border:1px solid #ccc;font-size:1rem}
+  button{background:#f97316;color:#fff;border:none;cursor:pointer}
+  footer{background:#e3e8f0;padding:10px;text-align:center;font-size:.9rem;color:#586179}
+</style>
+</head>
+<body>
+
+<header>
+  <div><strong>E‑Smart Market Pro</strong></div>
+  <div class="lang-switch">
+    <button onclick="setLang('ar')">AR</button>|
+    <button onclick="setLang('fr')">FR</button>|
+    <button onclick="setLang('en')">EN</button>
+  </div>
+</header>
+
+<section class="hero">
+  <h1 id="hero-title"></h1>
+  <p id="hero-desc"></p>
+</section>
+
+<section class="features" id="features"></section>
+
+<section class="cta">
+  <h2 id="cta-title"></h2>
+  <form>
+    <input type="text" placeholder="" id="name" required>
+    <input type="tel" placeholder="" id="phone" required>
+    <input type="email" placeholder="" id="email" required>
+    <input type="text" placeholder="" id="business" required>
+    <button type="submit" id="cta-button"></button>
+  </form>
+</section>
+
+<footer>
+  <span id="footer-text"></span>
+</footer>
+
+<script>
+const content = {
+  ar:{
+    heroTitle:"حوّل مقهاك إلى تجربة ذكية",
+    heroDesc:"نظام نقاط بيع ومخزون وتنبيهات لحظية، مصمم خصيصًا للمقاهي والمطاعم.",
+    features:[
+      "💰 مبيعات وتقارير فورية",
+      "📦 مخزون بالجرعات وتنبيهات انخفاض",
+      "📲 لوحة مالك على الهاتف مع إشعارات",
+      "🌐 تعدد لغات (AR/FR/EN)",
+      "📤 تنبيهات واتساب وتقارير يومية"
+    ],
+    ctaTitle:"احجز عرضًا تجريبيًا الآن",
+    placeholders:["الاسم","رقم الهاتف","البريد الإلكتروني","نوع النشاط"],
+    ctaButton:"إرسال",
+    footer:"© 2025 جميع الحقوق محفوظة — E‑Smart Market Pro"
+  },
+  fr:{
+    heroTitle:"Transformez votre café en expérience intelligente",
+    heroDesc:"Système de caisse, gestion de stock et alertes en temps réel, conçu pour cafés et restaurants.",
+    features:[
+      "💰 Ventes et rapports instantanés",
+      "📦 Stock par recettes et alertes de seuil",
+      "📲 Tableau de bord propriétaire mobile avec notifications",
+      "🌐 Multilingue (AR/FR/EN)",
+      "📤 Alertes WhatsApp et rapports quotidiens"
+    ],
+    ctaTitle:"Réservez une démo maintenant",
+    placeholders:["Nom","Téléphone","Email","Type d'activité"],
+    ctaButton:"Envoyer",
+    footer:"© 2025 Tous droits réservés — E‑Smart Market Pro"
+  },
+  en:{
+    heroTitle:"Turn Your Café into a Smart Experience",
+    heroDesc:"POS, inventory, and real-time alerts, built for cafés and restaurants.",
+    features:[
+      "💰 Instant sales & reports",
+      "📦 Inventory by recipes & low stock alerts",
+      "📲 Owner mobile dashboard with notifications",
+      "🌐 Multilingual (AR/FR/EN)",
+      "📤 WhatsApp alerts & daily reports"
+    ],
+    ctaTitle:"Book a Demo Now",
+    placeholders:["Name","Phone","Email","Business Type"],
+    ctaButton:"Send",
+    footer:"© 2025 All rights reserved — E‑Smart Market Pro"
+  }
+};
+
+function setLang(lang){
+  const t = content[lang];
+  document.getElementById("hero-title").textContent = t.heroTitle;
+  document.getElementById("hero-desc").textContent = t.heroDesc;
+  const feats = document.getElementById("features");
+  feats.innerHTML = "";
+  t.features.forEach(f=>{
+    const div = document.createElement("div");
+    div.className="feature";
+    div.textContent=f;
+    feats.appendChild(div);
+  });
+  document.getElementById("cta-title").textContent = t.ctaTitle;
+  document.getElementById("name").placeholder = t.placeholders[0];
+  document.getElementById("phone").placeholder = t.placeholders[1];
+  document.getElementById("email").placeholder = t.placeholders[2];
+  document.getElementById("business").placeholder = t.placeholders[3];
+  document.getElementById("cta-button").textContent = t.ctaButton;
+  document.getElementById("footer-text").textContent = t.footer;
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+}
+setLang("ar");
+</script>
+
+</body>
+</html>
